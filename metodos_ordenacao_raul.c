@@ -7,23 +7,23 @@
  * @copyright Copyright (c) 2023
  *
  *
- * @brief Arquivo template para trabalho de Pesquisa e Ordenação.
+ * @brief Arquivo template para trabalho de Pesquisa e OrdenaÃ§Ã£o.
  *
- *      Cada estudante deve implementar as funções conforme as assinaturas
- * abaixo e realizar as impressões dos vetores após a ordenação. Desta forma,
- * o(a) estudante deve implementar o trecho de código para impressão dos vetores
- * ordenados dentro da função `main` conforme o exemplo do Bubble Sort abaixo.
+ *      Cada estudante deve implementar as funÃ§Ãµes conforme as assinaturas
+ * abaixo e realizar as impressÃµes dos vetores apÃ³s a ordenaÃ§Ã£o. Desta forma,
+ * o(a) estudante deve implementar o trecho de cÃ³digo para impressÃ£o dos vetores
+ * ordenados dentro da funÃ§Ã£o `main` conforme o exemplo do Bubble Sort abaixo.
  *
- * Se necessário, declare e implemente funções auxiliares para realizar as
- * ordenações.
+ * Se necessÃ¡rio, declare e implemente funÃ§Ãµes auxiliares para realizar as
+ * ordenaÃ§Ãµes.
  *
- * Importante:Não altere as assinaturas dos métodos de ordenação!
+ * Importante:NÃ£o altere as assinaturas dos mÃ©todos de ordenaÃ§Ã£o!
  *
- * Caso o vetor não possa ser ordenado por algum método, imprima uma mensagem de
+ * Caso o vetor nÃ£o possa ser ordenado por algum mÃ©todo, imprima uma mensagem de
  * aviso e o vetor original.
  *
- * Atenção: Antes de entregar, conferir se dos dados de documentação no início
- * do arquivo estão preenchidos corretamente.
+ * AtenÃ§Ã£o: Antes de entregar, conferir se dos dados de documentaÃ§Ã£o no inÃ­cio
+ * do arquivo estÃ£o preenchidos corretamente.
  *
  */
 #include <stdio.h>
@@ -42,7 +42,8 @@ void quickSort(int *A, int size);
 int main(){
 
     int i;
-    int vetor[] = {1, 22, -10, 38, 5, 7};
+    //int vetor[] = {1, 22, -10, 38, 5, 7}; //vetor padrÃ£o
+    int vetor[] = {9, 0, -15, 60, 9999, 3};
     int tamanhoVetor = (int)sizeof(vetor)/sizeof(int);
 
     printf("\nVetor original: ");
@@ -183,7 +184,7 @@ void intercala(int *A, int inicio, int meio, int fim){
     }
     
     while(j <= fim){
-        aux[k] = A[i];
+        aux[k] = A[j];
         k++;
         j++;
     }
@@ -197,7 +198,7 @@ void mergeRecursive(int *A, int inicio, int fim){
     int meio;
     
     if(inicio < fim){
-        meio = (inicio+fim)%2;
+        meio = (inicio+fim)/2;
         
         mergeRecursive(A, inicio, meio);
         mergeRecursive(A, meio+1, fim);
@@ -206,7 +207,7 @@ void mergeRecursive(int *A, int inicio, int fim){
 }
 
 void mergeSort(int *A, int size){
-    mergeRecursive(A, 0, size);
+    mergeRecursive(A, 0, size-1);
 }
 
 int particiona(int *A, int inicio, int fim){
@@ -234,7 +235,9 @@ int particiona(int *A, int inicio, int fim){
 
 void quickRecursive(int *A, int inicio, int fim){
     int posPivo;
-    if(inicio < fim){
+    
+    if(A[inicio] < A[fim]){
+        
         posPivo = particiona(A, inicio, fim);
         quickRecursive(A, inicio, posPivo-1);
         quickRecursive(A, posPivo+1, fim);
@@ -242,5 +245,5 @@ void quickRecursive(int *A, int inicio, int fim){
 }
 
 void quickSort(int *A, int size){
-    quickRecursive(A, 0, size);
+    quickRecursive(A, 0, size-1);
 }
