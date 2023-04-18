@@ -27,6 +27,7 @@
  *
  */
 #include <stdio.h>
+#include <stdlib.h>
 
 void copia(int *A, int *v, int size);
 void bubbleSort(int *A, int size);
@@ -34,16 +35,18 @@ void selectionSort(int *A, int size);
 void insertionSort(int *A, int size);
 void mergeSort(int *A, int size);
 void quickSort(int *A, int size);
-// void heapSort(int *A, int size);
-// void countingSort(int *A, int size);
-// void radixSort(int *A, int size);
+void heapSort(int *A, int size);
+void countingSort(int *A, int size);
+void radixSort(int *A, int size);
 
 
 int main(){
 
     int i;
     //int vetor[] = {1, 22, -10, 38, 5, 7}; //vetor padrão
-    int vetor[] = {9, 0, -15, 60, 9999, 3};
+    //int vetor[] = {9, 0, -15, 60, 99, 3, -3, 1, 42, 17, 21, 2}; //vetor grandao
+    //int vetor[] = {0, 13, 5, 8, 69, 1}; //vetor sem negativo
+    int vetor[] = {0, 13, 5, 8, 69, 1, 73, 12, 3, 6, 34, 29, 3}; //vetor sem negativo e grandao
     int tamanhoVetor = (int)sizeof(vetor)/sizeof(int);
 
     printf("\nVetor original: ");
@@ -98,11 +101,30 @@ int main(){
     printf("\n");
 
     // heap sort
+    int heapVec[tamanhoVetor];
+    copia(vetor, heapVec, tamanhoVetor);
+    heapSort(heapVec, tamanhoVetor);
+    printf("\nHeap sort: ");
+    for (i = 0 ; i < tamanhoVetor ; i++)
+        printf("%d ", heapVec[i]);
+    printf("\n");
 
     // counting sort
-
+    int countingVec[tamanhoVetor];
+    copia(vetor, countingVec, tamanhoVetor);
+    countingSort(countingVec, tamanhoVetor);
+    printf("\nCounting sort: ");
+    for (i = 0 ; i < tamanhoVetor ; i++)
+        printf("%d ", countingVec[i]);
+    printf("\n");
     // radix sort
-
+    int radixVec[tamanhoVetor];
+    copia(vetor, radixVec, tamanhoVetor);
+    radixSort(radixVec, tamanhoVetor);
+    printf("\nRadix sort: ");
+    for (i = 0 ; i < tamanhoVetor ; i++)
+        printf("%d ", radixVec[i]);
+    printf("\n");
     return 0;
 }
 
@@ -111,6 +133,34 @@ void copia(int *A, int *V, int size){
     for (i = 0 ; i < size ; i++)
         V[i] = A[i];
 }
+
+int buscaMaior(int *A, int size){
+    int maior = A[0];
+    int i;
+    
+    for(i = 1 ; i < size ; i++){
+        if(A[i] > maior){
+            maior = A[i];
+        }
+    }
+    
+    return maior;
+}
+
+int testaNegativo(int *A, int size){
+    int negativo = 0;
+    int i;
+    
+    for(i = 0 ; i < size ; i++){
+        if(A[i] < 0){
+            negativo = 1;
+        }
+    }
+    
+    return negativo;
+}
+
+//--------------bubbleSort--------------//
 
 void bubbleSort(int *A, int size){
     int flag; 
@@ -132,6 +182,8 @@ void bubbleSort(int *A, int size){
     }
 }
 
+//--------------selectionSort--------------//
+
 void selectionSort(int *A, int size){
     int menor = 0;
 	int i, j;
@@ -149,6 +201,8 @@ void selectionSort(int *A, int size){
     }
 }
 
+//--------------insertionSort--------------//
+
 void insertionSort(int *A, int size){
     int i, j;
     for(i = 1 ; i < size ; i++){
@@ -159,6 +213,8 @@ void insertionSort(int *A, int size){
         A[j] = p;
     }
 }
+
+//--------------mergeSort--------------//
 
 void intercala(int *A, int inicio, int meio, int fim){
     int aux[fim-inicio+1];
@@ -210,6 +266,8 @@ void mergeSort(int *A, int size){
     mergeRecursive(A, 0, size-1);
 }
 
+//--------------quickSort--------------//
+
 int particiona(int *A, int inicio, int fim){
     int posPivo = fim;
     int k = inicio;
@@ -229,6 +287,7 @@ int particiona(int *A, int inicio, int fim){
         int aux = A[k];
         A[k] = A[posPivo];
         A[posPivo] = aux;
+        posPivo = k;
     }
     return posPivo;
 }
@@ -236,7 +295,7 @@ int particiona(int *A, int inicio, int fim){
 void quickRecursive(int *A, int inicio, int fim){
     int posPivo;
     
-    if(A[inicio] < A[fim]){
+    if(inicio < fim){
         
         posPivo = particiona(A, inicio, fim);
         quickRecursive(A, inicio, posPivo-1);
@@ -246,4 +305,121 @@ void quickRecursive(int *A, int inicio, int fim){
 
 void quickSort(int *A, int size){
     quickRecursive(A, 0, size-1);
+}
+
+//--------------heapSort--------------//
+
+void criaheap(int *A, int i, int size){
+    int maior = i;
+    int esquerda = 2*i + 1;
+    int direita = 2*i + 2;
+    
+    if(esquerda < size && A[esquerda] > A[maior]){
+        maior = esquerda;
+    }
+    
+    if(direita < size && A[direita] > A[maior]){
+        maior = direita;
+    }
+    
+    if(maior != i){
+        //troca
+        int aux = A[i];
+        A[i] = A[maior];
+        A[maior] = aux;
+        criaheap(A, maior, size);
+    }
+}
+
+void heapSort(int *A, int size){
+    int k;
+    
+    for(k = size/2-1 ; k >= 0 ; k--){
+        criaheap(A, k, size);
+    }
+    
+    for(k = size-1 ; k >= 1 ; k--){
+        //troca
+        int aux = A[0];
+        A[0] = A[k];
+        A[k] = aux;
+        criaheap(A, 0, k);
+    }
+}
+
+//--------------countingSort--------------//
+
+void countingSort(int *A, int size){
+    int n = testaNegativo(A, size);
+    if(n == 1){
+        printf("\nO vetor é impossivel de ser ordenado por Counting Sort, possui numeros negativos.");
+        return;
+    }
+    
+    int k = buscaMaior(A, size);
+    int count[k+1], aux[size];
+    int i;
+    
+    for(i = 0 ; i <= k ; i++){
+        count[i] = 0;
+    }
+    
+    for(i = 0 ; i < size ; i++){
+        count[A[i]]++;
+    }
+    
+    for(i = 1 ; i <= k ; i++){
+        count[i] += count[i-1];
+    }
+    
+    for(i = size-1 ; i >= 0 ; i--){
+        count[A[i]]--;
+        aux[count[A[i]]] = A[i];
+    }
+    
+    for(i = 0 ; i < size ; i++){
+        A[i] = aux[i];
+    }
+}
+
+//--------------radixSort--------------//
+
+void counting(int *A, int size, int pos){
+    int aux[size];
+    int count[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    int i, digito;
+    
+    for(i = 0 ; i < size ; i++){
+        digito = (A[i]/pos)%10;
+        count[digito]++;
+    }
+    
+    for(i = 1 ; i < 10 ; i++){
+        count[i] = count[i] + count[i-1];
+    }
+    
+    for(i = size-1 ; i >= 0 ; i--){
+        digito = (A[i]/pos)%10;
+        count[digito]--;
+        aux[count[digito]] = A[i];
+    }
+    
+    for(i = 0 ; i < size ; i++){
+        A[i] = aux[i];
+    }
+}
+
+void radixSort(int *A, int size){
+    int n = testaNegativo(A, size);
+    if(n == 1){
+        printf("\nO vetor é impossivel de ser ordenado por Radix Sort, possui numeros negativos.");
+        return;
+    }
+    
+    int max = buscaMaior(A, size);
+    int pos;
+    
+    for(pos = 1 ; max/pos > 0 ; pos*=10){
+        counting(A, size, pos);
+    }
 }
