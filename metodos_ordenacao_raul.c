@@ -1,8 +1,8 @@
 /**
  * @file metodos_ordenacao_raul.c
  * @author Raul Bonfante Magri
- * @version 0.3
- * @date 2023-03-30
+ * @version 0.1
+ * @date 2023-04-28
  *
  * @copyright Copyright (c) 2023
  *
@@ -43,10 +43,10 @@ void radixSort(int *A, int size);
 int main(){
 
     int i;
-    //int vetor[] = {1, 22, -10, 38, 5, 7}; //vetor padrão
+    int vetor[] = {1, 22, -10, 38, 5, 7}; //vetor padrão
     //int vetor[] = {9, 0, -15, 60, 99, 3, -3, 1, 42, 17, 21, 2}; //vetor grandao
     //int vetor[] = {0, 13, 5, 8, 69, 1}; //vetor sem negativo
-    int vetor[] = {0, 13, 5, 8, 69, 1, 73, 12, 3, 6, 34, 29, 3}; //vetor sem negativo e grandao
+    //int vetor[] = {0, 13, 5, 8, 69, 1, 73, 12, 3, 6, 34, 29, 3}; //vetor sem negativo e grandao
     int tamanhoVetor = (int)sizeof(vetor)/sizeof(int);
 
     printf("\nVetor original: ");
@@ -117,6 +117,7 @@ int main(){
     for (i = 0 ; i < tamanhoVetor ; i++)
         printf("%d ", countingVec[i]);
     printf("\n");
+
     // radix sort
     int radixVec[tamanhoVetor];
     copia(vetor, radixVec, tamanhoVetor);
